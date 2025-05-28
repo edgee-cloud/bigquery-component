@@ -1,0 +1,35 @@
+manifest-version = 1
+
+[component]
+name = "example-rust-data-collection-component"
+version = "1.0.0"
+
+category = "data-collection"
+subcategory = "analytics"
+description = "Example Rust component for data collection"
+documentation = "https://github.com/edgee-cloud/example-rust-component"
+repository = "https://github.com/edgee-cloud/example-rust-component"
+language = "Rust"
+wit-version = "1.0.1"
+
+[component.build]
+command = "cargo build --target wasm32-wasip2 --release --target-dir ./target && mv ./target/wasm32-wasip2/release/example_rust_component.wasm ./component.wasm"
+output_path = "component.wasm"
+
+# required only for auth
+[component.settings.service_json]
+type = "string"
+title = "Service JSON"
+
+# required for the rest of the calls
+[component.settings.dataset_id]
+type = "string"
+title = "Dataset ID"
+
+[component.settings.project_id]
+type = "string"
+title = "Project ID"
+
+[component.settings.table_id]
+type = "string"
+title = "Table ID"
