@@ -20,6 +20,7 @@ output_path = "component.wasm"
 [component.settings.service_json]
 type = "string"
 title = "Service JSON"
+secret = true
 
 # required for the rest of the calls
 [component.settings.dataset_id]
