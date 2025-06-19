@@ -18,7 +18,7 @@ language = "Rust"
 wit-version = "1.0.1"
 
 [component.build]
-command = "cargo build --target wasm32-wasip2 --release --target-dir ./target && mv ./target/wasm32-wasip2/release/bigquery-component.wasm ./component.wasm"
+command = "cargo build --target wasm32-wasip2 --release --target-dir ./target && mv ./target/wasm32-wasip2/release/bigquery_component.wasm ./component.wasm"
 output_path = "component.wasm"
 
 [component.settings.service_json]
