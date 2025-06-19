@@ -26,8 +26,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./component.wasm
-          asset_name: component.wasm
+          asset_path: ./bigquery.wasm
+          asset_name: bigquery.wasm
           asset_content_type: application/wasm
       - name: Push to Edgee Component Registry
         run: edgee component push edgee --yes --changelog "${{ github.event.release.body }}"
