@@ -21,20 +21,19 @@ wit-version = "1.0.1"
 command = "cargo build --target wasm32-wasip2 --release --target-dir ./target && mv ./target/wasm32-wasip2/release/bigquery-component.wasm ./component.wasm"
 output_path = "component.wasm"
 
-# required only for auth
 [component.settings.service_json]
 type = "string"
 title = "Service JSON"
+description = "A Google Cloud service account key in JSON format."
 secret = true
-
-# required for the rest of the calls
-[component.settings.dataset_id]
-type = "string"
-title = "Dataset ID"
 
 [component.settings.project_id]
 type = "string"
 title = "Project ID"
+
+[component.settings.dataset_id]
+type = "string"
+title = "Dataset ID"
 
 [component.settings.table_id]
 type = "string"
