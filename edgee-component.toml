@@ -1,0 +1,43 @@
+manifest-version = 1
+
+[component]
+name = "BigQuery"
+version = "1.0.0"
+icon-path = "icon.png"
+
+category = "data-collection"
+subcategory = "warehouse"
+description = '''
+This component enables seamless integration between [Edgee](https://www.edgee.cloud)
+and [Google BigQuery](https://cloud.google.com/bigquery),
+allowing you to collect and forward analytics events to Google's petabyte-scale data warehouse.
+'''
+documentation = "https://github.com/edgee-cloud/bigquery-component"
+repository = "https://github.com/edgee-cloud/bigquery-component"
+language = "Rust"
+wit-version = "1.0.1"
+
+[component.build]
+command = "cargo build --target wasm32-wasip2 --release --target-dir ./target && mv ./target/wasm32-wasip2/release/bigquery_component.wasm ./bigquery.wasm"
+output_path = "bigquery.wasm"
+
+[component.settings.service_json]
+type = "string"
+title = "Service JSON"
+description = "A Google Cloud service account key in JSON format."
+secret = true
+
+[component.settings.project_id]
+type = "string"
+title = "Project ID"
+description = "The Google Cloud project ID where the BigQuery dataset is located."
+
+[component.settings.dataset_id]
+type = "string"
+title = "Dataset ID"
+description = "The BigQuery dataset ID where the table is located."
+
+[component.settings.table_id]
+type = "string"
+title = "Table ID"
+description = "The BigQuery table ID where the events will be stored."
