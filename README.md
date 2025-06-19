@@ -53,10 +53,10 @@ CREATE TABLE `your-project-id.your-dataset-id.your-table-id` (
 New records are ingested individually using BigQuery's streaming API. If your BigQuery table supports JSON types, both `context` and `data` will contain additional JSON sub-fields, whose schema is automatically inferred at runtime.
 
 Please note that:
-- The sub-fields under `context` are always the same, so you can use queries such as `SELECT context.client.ip AS ip FROM \`your-project-id.your-dataset-id.your-table-id\``.
+- The sub-fields under `context` are always the same, so you can use queries such as ```SELECT context.client.ip AS ip FROM \`your-project-id.your-dataset-id.your-table-id\```.
 - The sub-fields under `data` depend on the value of `event_type`, so you can use queries such as:
-  - `SELECT data.Track.name FROM \`your-project-id.your-dataset-id.your-table-id\` WHERE event_type = 'Track'`
-  - `SELECT data.Page.path FROM \`your-project-id.your-dataset-id.your-table-id\` WHERE event_type = 'Page'`
+  - ```SELECT data.Track.name FROM \`your-project-id.your-dataset-id.your-table-id\` WHERE event_type = 'Track'```
+  - ```SELECT data.Page.path FROM \`your-project-id.your-dataset-id.your-table-id\` WHERE event_type = 'Page'```
 
 ### Event Mapping
 
