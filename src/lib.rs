@@ -109,7 +109,6 @@ impl Guest for Component {
         Self::event(edgee_event, settings_dict)
     }
 
-    #[allow(unused_variables)]
     fn authenticate(settings_dict: Dict) -> Result<Option<AuthRequest>, String> {
         let settings = AuthSettings::new(settings_dict).map_err(|e| e.to_string())?;
 
