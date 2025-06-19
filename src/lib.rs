@@ -13,24 +13,39 @@ export!(Component);
 
 struct Component;
 
-impl Guest for Component {
-    #[allow(unused_variables)]
-    fn page(edgee_event: Event, settings_dict: Dict) -> Result<EdgeeRequest, String> {
+impl Component {
+    fn event(edgee_event: Event, settings_dict: Dict) -> Result<EdgeeRequest, String> {
         let settings = Settings::new(settings_dict).map_err(|e| e.to_string())?;
         let url = format!(
             "https://bigquery.googleapis.com/bigquery/v2/projects/{}/datasets/{}/tables/{}/insertAll",
             settings.project_id, settings.dataset_id, settings.table_id
         );
-        let file_content = serde_json::to_string(&edgee_event).unwrap_or_default();
-        let body = serde_json::json!({
-            "rows": [
-                {
-                    "json": {
-                        "test": file_content,
-                    }
-                }
-            ]
-        });
+
+        // CREATE TABLE edgee (
+        //    uuid UUID,
+        //    event_type String,
+        //    timestamp UInt64,
+        //    timestamp_millis UInt64,
+        //    timestamp_micros UInt64,
+        //    consent Nullable(String),
+        //    context JSON,
+        //    data JSON
+        //
+        // this is serializable
+        #[derive(serde::Serialize)]
+        struct Body {
+            rows: Vec<Row>,
+        }
+
+        #[derive(serde::Serialize)]
+        struct Row {
+            json: Event,
+        }
+
+        let body = Body {
+            rows: vec![Row { json: edgee_event }],
+        };
+
         Ok(EdgeeRequest {
             method: HttpMethod::Post,
             url,
@@ -44,70 +59,22 @@ impl Guest for Component {
             body: serde_json::to_string(&body).unwrap(),
             forward_client_headers: false,
         })
+    }
+}
+impl Guest for Component {
+    #[allow(unused_variables)]
+    fn page(edgee_event: Event, settings_dict: Dict) -> Result<EdgeeRequest, String> {
+        Self::event(edgee_event, settings_dict)
     }
 
     #[allow(unused_variables)]
     fn track(edgee_event: Event, settings_dict: Dict) -> Result<EdgeeRequest, String> {
-        let settings = Settings::new(settings_dict).map_err(|e| e.to_string())?;
-        let url = format!(
-            "https://bigquery.googleapis.com/bigquery/v2/projects/{}/datasets/{}/tables/{}/insertAll",
-            settings.project_id, settings.dataset_id, settings.table_id
-        );
-        let file_content = serde_json::to_string(&edgee_event).unwrap_or_default();
-        let body = serde_json::json!({
-            "rows": [
-                {
-                    "json": {
-                        "test": file_content,
-                    }
-                }
-            ]
-        });
-        Ok(EdgeeRequest {
-            method: HttpMethod::Post,
-            url,
-            headers: vec![
-                (
-                    "Authorization".to_string(),
-                    format!("Bearer {}", settings.access_token),
-                ),
-                ("Content-Type".to_string(), "application/json".to_string()),
-            ],
-            body: serde_json::to_string(&body).unwrap(),
-            forward_client_headers: false,
-        })
+        Self::event(edgee_event, settings_dict)
     }
 
     #[allow(unused_variables)]
     fn user(edgee_event: Event, settings_dict: Dict) -> Result<EdgeeRequest, String> {
-        let settings = Settings::new(settings_dict).map_err(|e| e.to_string())?;
-        let url = format!(
-            "https://bigquery.googleapis.com/bigquery/v2/projects/{}/datasets/{}/tables/{}/insertAll",
-            settings.project_id, settings.dataset_id, settings.table_id
-        );
-        let file_content = serde_json::to_string(&edgee_event).unwrap_or_default();
-        let body = serde_json::json!({
-            "rows": [
-                {
-                    "json": {
-                        "test": file_content,
-                    }
-                }
-            ]
-        });
-        Ok(EdgeeRequest {
-            method: HttpMethod::Post,
-            url,
-            headers: vec![
-                (
-                    "Authorization".to_string(),
-                    format!("Bearer {}", settings.access_token),
-                ),
-                ("Content-Type".to_string(), "application/json".to_string()),
-            ],
-            body: serde_json::to_string(&body).unwrap(),
-            forward_client_headers: false,
-        })
+        Self::event(edgee_event, settings_dict)
     }
 
     #[allow(unused_variables)]
