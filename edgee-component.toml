@@ -7,7 +7,11 @@ icon-path = "icon.png"
 
 category = "data-collection"
 subcategory = "warehouse"
-description = "Google bigquery component"
+description = '''
+This component enables seamless integration between [Edgee](https://www.edgee.cloud)
+and [Google BigQuery](https://cloud.google.com/bigquery),
+allowing you to collect and forward analytics events to Google's petabyte-scale data warehouse.
+'''
 documentation = "https://github.com/edgee-cloud/bigquery-component"
 repository = "https://github.com/edgee-cloud/bigquery-component"
 language = "Rust"
