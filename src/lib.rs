@@ -97,7 +97,6 @@ impl Component {
     }
 }
 impl Guest for Component {
-    #[allow(unused_variables)]
     fn page(edgee_event: Event, settings_dict: Dict) -> Result<EdgeeRequest, String> {
         Self::event(edgee_event, settings_dict)
     }
