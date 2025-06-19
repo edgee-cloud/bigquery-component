@@ -30,11 +30,14 @@ secret = true
 [component.settings.project_id]
 type = "string"
 title = "Project ID"
+description = "The Google Cloud project ID where the BigQuery dataset is located."
 
 [component.settings.dataset_id]
 type = "string"
 title = "Dataset ID"
+description = "The BigQuery dataset ID where the table is located."
 
 [component.settings.table_id]
 type = "string"
 title = "Table ID"
+description = "The BigQuery table ID where the events will be stored."
