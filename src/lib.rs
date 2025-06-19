@@ -4,8 +4,6 @@ use crate::exports::edgee::components::data_collection::{
 use anyhow::Context;
 use exports::edgee::components::data_collection::Guest;
 mod google_jwt;
-use jwt_simple::prelude::*;
-use serde_urlencoded;
 use std::collections::HashMap;
 
 wit_bindgen::generate!({world: "data-collection", path: ".edgee/wit", generate_all,     additional_derives: [serde::Serialize]});
