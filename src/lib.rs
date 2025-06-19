@@ -116,12 +116,7 @@ impl Guest for Component {
     fn authenticate(settings_dict: Dict) -> Result<Option<AuthRequest>, String> {
         let settings = AuthSettings::new(settings_dict).map_err(|e| e.to_string())?;
 
-        let service_json: google_jwt::ServiceAccountInfoJson =
-            serde_json::from_str(&settings.service_json)
-                .context("Failed to parse service_json")
-                .unwrap();
-
-        let body = google_jwt::generate_assertion_body(service_json);
+        let body = google_jwt::generate_assertion_body(settings.service_json);
 
         Ok(Some(AuthRequest {
             method: HttpMethod::Post,
