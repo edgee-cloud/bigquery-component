@@ -73,8 +73,8 @@ impl Component {
                         },
                         None => None,
                     },
-                    context: serde_json::to_string(&edgee_event.context).unwrap(),
-                    data: serde_json::to_string(&edgee_event.data).unwrap(),
+                    context: serde_json::to_string(&edgee_event.context)?,
+                    data: serde_json::to_string(&edgee_event.data)?,
                 },
             }],
         };
@@ -114,7 +114,9 @@ impl Guest for Component {
     fn authenticate(settings_dict: Dict) -> Result<Option<AuthRequest>, String> {
         let settings = AuthSettings::new(settings_dict).map_err(|e| e.to_string())?;
 
-        let body = google_jwt::generate_assertion_body(settings.service_json);
+        let Ok(body) = google_jwt::generate_assertion_body(settings.service_json) else {
+            return Err("Failed to generate assertion body".to_string());
+        };
 
         Ok(Some(AuthRequest {
             method: HttpMethod::Post,

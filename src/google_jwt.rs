@@ -2,9 +2,8 @@ use jwt_simple::prelude::*;
 use serde::{Deserialize, Serialize};
 use serde_urlencoded;
 
-pub(crate) fn generate_assertion_body(service_json: String) -> String {
-    let service_json: ServiceAccountInfoJson =
-        serde_json::from_str(&service_json).expect("Failed to parse service account JSON");
+pub(crate) fn generate_assertion_body(service_json: String) -> Result<String, anyhow::Error> {
+    let service_json: ServiceAccountInfoJson = serde_json::from_str(&service_json)?;
 
     #[derive(Serialize, Deserialize, Debug, PartialEq, Eq)]
     struct Claims {
@@ -18,7 +17,7 @@ pub(crate) fn generate_assertion_body(service_json: String) -> String {
         aud: service_json.token_uri.clone(),
     };
 
-    let key = RS256KeyPair::from_pem(service_json.private_key.as_str()).unwrap();
+    let key = RS256KeyPair::from_pem(service_json.private_key.as_str())?;
 
     let claims =
         jwt_simple::claims::Claims::with_custom_claims::<Claims>(claims, Duration::from_secs(3600));
@@ -30,7 +29,7 @@ pub(crate) fn generate_assertion_body(service_json: String) -> String {
         ("assertion", &assertion),
     ];
 
-    serde_urlencoded::to_string(params).unwrap()
+    Ok(serde_urlencoded::to_string(params))
 }
 
 #[derive(Serialize, Deserialize, Debug)]
