@@ -101,7 +101,6 @@ impl Guest for Component {
         Self::event(edgee_event, settings_dict)
     }
 
-    #[allow(unused_variables)]
     fn track(edgee_event: Event, settings_dict: Dict) -> Result<EdgeeRequest, String> {
         Self::event(edgee_event, settings_dict)
     }
