@@ -39,11 +39,57 @@ impl Component {
 
         #[derive(serde::Serialize)]
         struct Row {
-            json: Event,
+            json: RowValue,
+        }
+
+        #[derive(serde::Serialize)]
+        struct RowValue {
+            uuid: String,
+            event_type: String,
+            timestamp: i64,
+            timestamp_millis: i64,
+            timestamp_micros: i64,
+            consent: Option<String>,
+            context: String,
+            data: String,
         }
 
         let body = Body {
-            rows: vec![Row { json: edgee_event }],
+            rows: vec![Row {
+                json: RowValue {
+                    uuid: edgee_event.uuid.to_string(),
+                    event_type: match edgee_event.event_type {
+                        exports::edgee::components::data_collection::EventType::Page => {
+                            "page".to_string()
+                        }
+                        exports::edgee::components::data_collection::EventType::Track => {
+                            "track".to_string()
+                        }
+                        exports::edgee::components::data_collection::EventType::User => {
+                            "user".to_string()
+                        }
+                    },
+                    timestamp: edgee_event.timestamp as i64,
+                    timestamp_millis: edgee_event.timestamp_millis as i64,
+                    timestamp_micros: edgee_event.timestamp_micros as i64,
+                    consent: match edgee_event.consent {
+                        Some(consent) => match consent {
+                            exports::edgee::components::data_collection::Consent::Granted => {
+                                Some("granted".to_string())
+                            }
+                            exports::edgee::components::data_collection::Consent::Denied => {
+                                Some("denied".to_string())
+                            }
+                            exports::edgee::components::data_collection::Consent::Pending => {
+                                Some("pending".to_string())
+                            }
+                        },
+                        None => None,
+                    },
+                    context: serde_json::to_string(&edgee_event.context).unwrap(),
+                    data: serde_json::to_string(&edgee_event.data).unwrap(),
+                },
+            }],
         };
 
         Ok(EdgeeRequest {
