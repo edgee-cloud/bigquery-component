@@ -1,16 +1,36 @@
+use jwt_simple::prelude::*;
 use serde::{Deserialize, Serialize};
+use serde_urlencoded;
 
-#[derive(Serialize, Deserialize, Debug, PartialEq, Eq)]
-pub(crate) struct Claims {
-    pub(crate) iss: String,
-    pub(crate) scope: String,
-    pub(crate) aud: String,
-}
+pub(crate) fn generate_assertion_body(service_json: String) -> String {
+    let service_json: ServiceAccountInfoJson =
+        serde_json::from_str(&service_json).expect("Failed to parse service account JSON");
 
-impl Claims {
-    pub(crate) fn new(iss: String, scope: String, aud: String) -> Self {
-        Self { iss, scope, aud }
+    #[derive(Serialize, Deserialize, Debug, PartialEq, Eq)]
+    struct Claims {
+        iss: String,
+        scope: String,
+        aud: String,
     }
+    let claims = Claims {
+        iss: service_json.client_email,
+        scope: "https://www.googleapis.com/auth/bigquery.insertdata".to_string(),
+        aud: service_json.token_uri.clone(),
+    };
+
+    let key = RS256KeyPair::from_pem(service_json.private_key.as_str()).unwrap();
+
+    let claims =
+        jwt_simple::claims::Claims::with_custom_claims::<Claims>(claims, Duration::from_secs(3600));
+
+    let assertion = key.sign::<Claims>(claims).unwrap();
+
+    let params = [
+        ("grant_type", "urn:ietf:params:oauth:grant-type:jwt-bearer"),
+        ("assertion", &assertion),
+    ];
+
+    serde_urlencoded::to_string(params).unwrap()
 }
 
 #[derive(Serialize, Deserialize, Debug)]

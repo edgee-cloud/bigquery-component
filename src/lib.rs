@@ -21,17 +21,6 @@ impl Component {
             settings.project_id, settings.dataset_id, settings.table_id
         );
 
-        // CREATE TABLE edgee (
-        //    uuid UUID,
-        //    event_type String,
-        //    timestamp UInt64,
-        //    timestamp_millis UInt64,
-        //    timestamp_micros UInt64,
-        //    consent Nullable(String),
-        //    context JSON,
-        //    data JSON
-        //
-        // this is serializable
         #[derive(serde::Serialize)]
         struct Body {
             rows: Vec<Row>,
@@ -132,26 +121,7 @@ impl Guest for Component {
                 .context("Failed to parse service_json")
                 .unwrap();
 
-        // https://developers.google.com/identity/protocols/oauth2/service-account#authorizingrequests
-        let claims = google_jwt::Claims::new(
-            service_json.client_email,
-            "https://www.googleapis.com/auth/bigquery.insertdata".to_string(),
-            service_json.token_uri.clone(),
-        );
-
-        let key = RS256KeyPair::from_pem(service_json.private_key.as_str()).unwrap();
-
-        let claims =
-            Claims::with_custom_claims::<google_jwt::Claims>(claims, Duration::from_secs(3600));
-
-        let assertion = key.sign::<google_jwt::Claims>(claims).unwrap();
-
-        let params = [
-            ("grant_type", "urn:ietf:params:oauth:grant-type:jwt-bearer"),
-            ("assertion", &assertion),
-        ];
-
-        let body = serde_urlencoded::to_string(params).unwrap();
+        let body = google_jwt::generate_assertion_body(service_json);
 
         Ok(Some(AuthRequest {
             method: HttpMethod::Post,
