@@ -29,7 +29,7 @@ pub(crate) fn generate_assertion_body(service_json: String) -> Result<String, an
         ("assertion", &assertion),
     ];
 
-    Ok(serde_urlencoded::to_string(params))
+    Ok(serde_urlencoded::to_string(params)?)
 }
 
 #[derive(Serialize, Deserialize, Debug)]

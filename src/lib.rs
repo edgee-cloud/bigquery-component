@@ -73,8 +73,10 @@ impl Component {
                         },
                         None => None,
                     },
-                    context: serde_json::to_string(&edgee_event.context)?,
-                    data: serde_json::to_string(&edgee_event.data)?,
+                    context: serde_json::to_string(&edgee_event.context)
+                        .expect("Failed to serialize context"),
+                    data: serde_json::to_string(&edgee_event.data)
+                        .expect("Failed to serialize data"),
                 },
             }],
         };
