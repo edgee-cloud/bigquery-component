@@ -56,9 +56,9 @@ impl Component {
                             "user".to_string()
                         }
                     },
-                    timestamp: edgee_event.timestamp as i64,
-                    timestamp_millis: edgee_event.timestamp_millis as i64,
-                    timestamp_micros: edgee_event.timestamp_micros as i64,
+                    timestamp: edgee_event.timestamp,
+                    timestamp_millis: edgee_event.timestamp_millis,
+                    timestamp_micros: edgee_event.timestamp_micros,
                     consent: match edgee_event.consent {
                         Some(consent) => match consent {
                             exports::edgee::components::data_collection::Consent::Granted => {

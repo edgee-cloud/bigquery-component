@@ -1,6 +1,5 @@
 use jwt_simple::prelude::*;
 use serde::{Deserialize, Serialize};
-use serde_urlencoded;
 
 pub(crate) fn generate_assertion_body(service_json: String) -> Result<String, anyhow::Error> {
     let service_json: ServiceAccountInfoJson = serde_json::from_str(&service_json)?;
