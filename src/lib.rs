@@ -147,7 +147,7 @@ impl AuthSettings {
 
         let service_json = settings_map
             .get("service_json")
-            .context("Missing client_id setting")?
+            .context("Missing service_json setting")?
             .to_string();
 
         Ok(Self { service_json })
