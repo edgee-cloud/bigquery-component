@@ -1,7 +1,7 @@
 manifest-version = 1
 
 [component]
-name = "google-bigquery"
+name = "BigQuery"
 version = "1.0.0"
 icon-path = "icon.png"
 
