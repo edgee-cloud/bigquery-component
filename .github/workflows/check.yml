@@ -64,8 +64,8 @@ jobs:
       - run: edgee component build
       - name: Verify .wasm file exists
         run: |
-          if [ ! -f "./component.wasm" ]; then
-              echo "❌ Error: component.wasm not found" >&2
+          if [ ! -f "./bigquery.wasm" ]; then
+              echo "❌ Error: bigquery.wasm not found" >&2
               exit 1
           fi
   test:
